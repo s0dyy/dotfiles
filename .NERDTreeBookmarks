@@ -1,0 +1,14 @@
+.alacritty.yml ~/.alacritty.yml
+.htoprc ~/.htoprc
+.NERDTreeBookmarks ~/.NERDTreeBookmarks
+.npmrc ~/.npmrc
+.psqlrc ~/.psqlrc
+.tmux.conf ~/.tmux.conf
+.tmuxline-dogrun.conf ~/.tmuxline-dogrun.conf
+.vimrc ~/.vimrc
+.zshrc ~/.zshrc
+scripts ~/scripts
+waybar ~/waybar
+.sway ~/.sway
+
+.gemrc ~/.gemrc
