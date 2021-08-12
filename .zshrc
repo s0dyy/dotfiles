@@ -8,8 +8,8 @@ mkdir -p ${HOME}/.zsh
 setopt auto_cd
 
 function chpwd() {
-  emulate -L zsh
-  exa -lagF --sort type --time-style iso
+	emulate -L zsh
+	exa -lagF --sort type --time-style iso --icons --git
 }
 
 autoload -Uz compinit -d ${HOME}/.zsh/zcompdump
@@ -42,14 +42,15 @@ eval "$(starship init zsh)"
 export TERM=xterm-256color
 export EDITOR=vim
 export KEYTIMEOUT=50
-#export GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
+export GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
 #export GEM_PATH=${GEM_HOME}
 export LESSHISTSIZE=0
 export HTOPRC=~/.htoprc
+#export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/s0dyy/.local/share/flatpak/exports/share:/usr/share:/usr/local/share"
 
 composer="${HOME}/.config/composer/vendor/bin"
 fzf="${HOME}/.fzf/bin"
-#gem="${GEM_HOME}/bin"
+gem="${GEM_HOME}/bin"
 npm="${HOME}/.npm-packages/bin"
 pip="${HOME}/.local/bin"
 pulsar="${HOME}/Documents/binaries/apache-pulsar-2.7.0/bin"
@@ -57,7 +58,7 @@ scripts="/home/s0dyy/Documents/github/dotfiles/shellscripts"
 flatpak="/var/lib/flatpak/exports/bin"
 
 #export PATH=${PATH}:${composer}:${fzf}:${gem}:${npm}:${pip}:${pulsar}:${scripts}:${flatpak}
-export PATH=${PATH}:${composer}:${fzf}:${npm}:${pip}:${pulsar}:${scripts}:${flatpak}
+export PATH=${PATH}:${composer}:${fzf}:${gem}:${npm}:${pip}:${pulsar}:${scripts}:${flatpak}
 
 #--------------#
 #      MAP     #
@@ -92,12 +93,12 @@ alias caunxa="cave uninstall -x --all-versions"
 alias epo="vim /etc/paludis/options.conf"
 
 # Exa
-alias ll1="exa -a1F --sort type"
-alias ll1t="exa -a1TF --sort type"
-alias ll="exa -lgF --sort type --time-style long-iso"
-alias lla="exa -lagF --sort type --time-style long-iso"
-alias llag="exa -lagF --git --sort type --time-style long-iso"
-alias llat="exa -lagTF --sort type --time-style long-iso"
+alias ll1="exa -a1F --sort type --icons"
+alias ll1t="exa -a1TF --sort type --icons"
+alias ll="exa -lgF --sort type --time-style long-iso --icons"
+alias lla="exa -lagF --sort type --time-style long-iso --icons"
+alias llag="exa -lagF --git --sort type --time-style long-iso --icons"
+alias llat="exa -lagTF --sort type --time-style long-iso --icons"
 
 # Paths
 alias ccd="cd ${HOME}/Documents/clevercloud-dev"
@@ -116,39 +117,24 @@ alias var="cd ${HOME}/Documents/various"
 alias cc="clear"
 alias rr="su -"
 alias zz="source ${HOME}/.zshrc"
-alias sysu="systemctl suspend"
-#alias grep="rg"
-alias cat="bat"
-alias tt="tmux new -s 'TMUX #${number}'"
+alias cat="bat -p"
+alias fd="fd -H -i -L"
+#alias vim="nvim"
 
 # Send to clipboard
 function ccat() {
-  cat ${1} | wl-copy
+	cat ${1} | wl-copy
 }
 
 # Sprunge: command line pastebin
 function sprunge() {
-  cat ${1} | curl -F "sprunge=<-" http://sprunge.us
-}
-
-# Screenshot
-function screen() {
-  grim -g "$(slurp)" ${HOME}/Pictures/screenshots/$(date +'%Y-%m-%d-%H%M%S.png')
+	cat ${1} | curl -F "sprunge=<-" http://sprunge.us
 }
 
 # Last paludis build
 function lbu() {
-  build="/var/tmp/paludis/build"
-  cd "${build}/$(ls -t ${build} | head -1)"
-}
-
-# Sway
-function ssw() {
-  if [ ${HOSTNAME} = laptop ]; then
-    GDK_SCALE=2 exec sway
-  else
-    exec sway
-  fi
+	build="/var/tmp/paludis/build"
+	cd "${build}/$(ls -t ${build} | head -1)"
 }
 
 #-----#
@@ -156,7 +142,7 @@ function ssw() {
 #-----#
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then
-  eval "$(ssh-agent -s)" > /dev/null 2>&1
+	eval "$(ssh-agent -s)" > /dev/null 2>&1
 fi
 
 #-----#
@@ -171,8 +157,8 @@ export BAT_CONFIG_PATH="${HOME}/.bat"
 
 # Download and install
 if [[ ! -d ~/.fzf ]]; then
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  ${HOME}/.fzf/./install --64 --no-bash --no-fish --no-update-rc --completion --key-bindings --xdg
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	${HOME}/.fzf/./install --64 --no-bash --no-fish --no-update-rc --completion --key-bindings --xdg
 fi
 
 # Auto-completion
@@ -193,58 +179,9 @@ eval bindkey '^p' fzf-file-widget
 #------#
 
 # Do not run tmux in console mode
-#if [[ ! -z $DISPLAY ]]; then
-  # Start tmux automatically and close term after exit tmux (stackoverflow)
-  #if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]] && [[ ! "$USERNAME" = root ]]; then
-    #number=$(shuf -i 1000-9999 -n 1)
-    #exec tmux new -s "TMUX #${number}"
-  #fi
-#fi
-
-#------#
-# SWAY #
-#------#
-
-if [ "$XDG_SESSION_DESKTOP" = "sway" ] ; then
-  # https://github.com/swaywm/sway/issues/595
-  export _JAVA_AWT_WM_NONREPARENTING=1
+if [[ ! -z $DISPLAY ]]; then
+	# Start tmux automatically and close term after exit tmux
+	if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]] && [[ ! "$USERNAME" = root ]]; then
+		exec tmux
+	fi
 fi
-
-#---------------#
-# MAN SELENIZED #
-#---------------#
-
-if [ "$OSTYPE[0,7]" = "solaris" ]
-then
-    if [ ! -x ${HOME}/bin/nroff ]
-    then
-        mkdir -p ${HOME}/bin
-        cat > ${HOME}/bin/nroff <<EOF
-#!/bin/sh
-if [ -n "\$_NROFF_U" -a "\$1,\$2,\$3" = "-u0,-Tlp,-man" ]; then
-    shift
-    exec /usr/bin/nroff -u\${_NROFF_U} "\$@"
-fi
-#-- Some other invocation of nroff
-exec /usr/bin/nroff "\$@"
-EOF
-chmod +x ${HOME}/bin/nroff
-        fi
-fi
-
-function man() {
-    env \
-        LESS_TERMCAP_mb=$(printf "\e[1;34m") \
-        LESS_TERMCAP_md=$(printf "\e[1;34m") \
-        LESS_TERMCAP_me=$(printf "\e[0m") \
-        LESS_TERMCAP_se=$(printf "\e[0m") \
-        LESS_TERMCAP_so=$(printf "\e[30;39;100m") \
-        LESS_TERMCAP_ue=$(printf "\e[0m") \
-        LESS_TERMCAP_us=$(printf "\e[4;36m") \
-        PAGER="${commands[less]:-$PAGER}" \
-        _NROFF_U=1 \
-        GROFF_NO_SGR=1 \
-        PATH=${HOME}/bin:${PATH} \
-    man "$@"
-}
-

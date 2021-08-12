@@ -9,6 +9,21 @@ common=(
     # Device drivers
     "-e" "CONFIG_BLK_DEV_NVME" # NVM Express block device
     "-e" "CONFIG_DM_CRYPT" # Crypt target support
+    "-e" "CONFIG_CRYPTO_USER_API_HASH" 
+    "-e" "CONFIG_CRYPTO_USER_API_SKCIPHER" 
+    "-e" "CONFIG_KEY_DH_OPERATIONS" 
+    "-e" "CONFIG_CRYPTO_ECB" 
+    "-e" "CONFIG_CRYPTO_CBC" 
+    "-e" "CONFIG_CRYPTO_DES" 
+    "-e" "CONFIG_CRYPTO_HMAC" 
+    "-e" "CONFIG_CRYPTO_SHA512" 
+    "-e" "CONFIG_CRYPTO_SHA1" 
+    "-e" "CONFIG_CRYPTO_SHA1_SSSE3" 
+    "-e" "CONFIG_CRYPTO_SHA512_SSSE3" 
+    "-e" "CONFIG_CRYPTO_DES3_EDE_X86_64" 
+    "-m" "CONFIG_IWLWIFI" 
+    "-m" "CONFIG_IWLDVM" 
+    "-m" "CONFIG_IWLMVM" 
     # Memory Management options
     "-e" "CONFIG_TRANSPARENT_HUGEPAGE" # Transparent Hugepage Support
     # File systems
@@ -73,7 +88,12 @@ desktop=(
 )
 
 laptop=(
-  # TODO:
+  # Virtualization
+  "-e" "CONFIG_KVM_INTEL"
+  # Processor type and features
+  "-e" "CONFIG_MCORE2"
+  # Device drivers
+  "-e" "CONFIG_THINKPAD"
 )
 
 if [[ $(hostname) == "desktop" ]]; then

@@ -8,9 +8,10 @@ FLATPAK=( \
   #"com.microsoft.Teams"
   #"flathub us.zoom.Zoom" 
   #"flathub com.discordapp.Discord" 
+  "flathub im.riot.Riot"
   #"flathub com.slack.Slack" 
   #"flathub com.spotify.Client" 
-  "flathub com.google.AndroidStudio"
+  #"flathub com.google.AndroidStudio"
 )
 
 for apps in "${FLATPAK[@]}"; do
